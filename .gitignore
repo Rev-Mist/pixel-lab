@@ -1,0 +1,10 @@
+# Build output
+build/
+
+# Visual Studio files
+.vs/
+
+# Compiled files
+*.exe
+*.obj
+*.pdb
