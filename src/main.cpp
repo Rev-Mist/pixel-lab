@@ -120,9 +120,19 @@ int main()
 
 
         // Clear the screen with a dark background
-        SDL_SetRenderDrawColor(
-            renderer, 25, 25, 35, 255);
-        SDL_RenderClear(renderer);
+        if (counter_for_collision < 50)
+        {
+            SDL_SetRenderDrawColor(
+                renderer, 25, 25, 35, 255);
+            SDL_RenderClear(renderer);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(
+				renderer, 225, 225, 225, 255);  //change the background color after 50 coins are collected 
+            SDL_RenderClear(renderer);
+        }
+
 
         // Set the rectangle's color to teal
         SDL_SetRenderDrawColor(
