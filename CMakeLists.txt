@@ -17,6 +17,6 @@ add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
 
 add_executable(pixel_lab
     src/main.cpp
-)
+ "src/Player.h" "src/Player.cpp")
 
 target_link_libraries(pixel_lab PRIVATE SDL3::SDL3)

@@ -5,6 +5,7 @@ RUN-
 ./build/Debug/pixel_lab.exe
 */
 
+#include "Player.h"
 #include <SDL3/SDL.h>
 #include <iostream>
 #include <cstdlib>
@@ -16,11 +17,7 @@ float window_width = 500.0f;
 int counter_for_collision = 0;
 
 // 1. Rectangle properties
-float rectX = 100.0f;
-float rectY = 100.0f;
-const float rectWidth = 20.0f;
-const float rectHeight = 20.0f;
-const float speed = 250.0f; // Pixels per second
+Player player;
     
     //starting location of the coin
 float coinX = 350.0f;
@@ -81,42 +78,12 @@ int main()
         }
 
         // Read keyboard input
-        const bool* keys = SDL_GetKeyboardState(nullptr);
-
-        if (keys[SDL_SCANCODE_LEFT]) {
-            rectX -= speed * deltaTime;
-        }
-
-        if (keys[SDL_SCANCODE_RIGHT]) {
-            rectX += speed * deltaTime;
-        }
-
-        if (keys[SDL_SCANCODE_UP]) {
-            rectY -= speed * deltaTime;
-        }
-
-        if (keys[SDL_SCANCODE_DOWN]) {
-            rectY += speed * deltaTime;
-        }
+        player.move(deltaTime);
 
 
         // Keep the rectangle inside the window
 
-        if (rectX < 0.0f) {
-            rectX = 0.0f;
-        }
-
-        if (rectY < 0.0f) {
-            rectY = 0.0f;
-        }
-
-        if (rectX > window_width - rectWidth) {
-            rectX = window_width - rectWidth;
-        }
-
-        if (rectY > window_height - rectHeight) {
-            rectY = window_height - rectHeight;
-        }
+        player.checkBoundaries(window_width, window_height);
 
 
         // Clear the screen with a dark background
@@ -133,18 +100,9 @@ int main()
             SDL_RenderClear(renderer);
         }
 
+        // For the rectangle
+        player.render(renderer);
 
-        // Set the rectangle's color to teal
-        SDL_SetRenderDrawColor(
-            renderer, 50, 200, 170, 255);
-
-        // Define the rectangle's current position
-        SDL_FRect rect = {
-            rectX,
-            rectY,
-            rectWidth,
-            rectHeight
-        };
 
         //coin's current position
         SDL_FRect coin = {
@@ -154,9 +112,6 @@ int main()
             coinSize
                 };
 
-        // Draw the rectangle
-        SDL_RenderFillRect(renderer, &rect);
-
         if (!coinCollected) {
             SDL_SetRenderDrawColor(renderer, 255, 200, 50, 255);
             SDL_RenderFillRect(renderer, &coin);
@@ -164,10 +119,10 @@ int main()
 
         // Check whether the player overlaps the collectible
         bool touching =
-            rect.x < coin.x + coin.w &&
-            rect.x + rect.w > coin.x &&
-            rect.y < coin.y + coin.h &&
-            rect.y + rect.h > coin.y;
+            player.getX() < coin.x + coin.w &&
+            player.getX() + player.getWidth() > coin.x &&
+            player.getY() < coin.y + coin.h &&
+            player.getY() + player.getHeight() > coin.y;
         
         //if (touching) {
         //    std::cout << "Collectible touched!\n";
